@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Fast and easy responsive image compression tool. Compress images online and download automatically." />
+  <meta name="keywords" content="Image Compression, Compress Image Online, Image Optimizer, Responsive, Image size decreaser, how to decrease image size" />
+  <meta name="author" content="YourName" />
+  <title>Image Compression Tool | Compress & Auto Download</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Image Compression Tool" />
+  <meta property="og:description" content="Compress images online with auto download feature." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #121212;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    header {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #0af;
+      text-shadow: 0 0 5px #0af88f;
+      user-select: none;
+    }
+    main {
+      background: #1f1f1f;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow:
+        0 4px 10px rgba(10, 175, 255, 0.25),
+        inset 0 0 20px rgba(10, 175, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      position: relative;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #0af;
+      letter-spacing: 0.02em;
+    }
+    input[type="file"] {
+      border: 2px dashed #0af;
+      background: #222;
+      color: #0af;
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    input[type="file"]:hover {
+      background: #0af1;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #0af;
+      cursor: pointer;
+    }
+    #compressionValue {
+      color: #0af;
+      font-weight: 700;
+    }
+    button {
+      background: linear-gradient(45deg, #0af, #0af88f);
+      border: none;
+      color: #121212;
+      padding: 0.9rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0af88f;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:disabled {
+      background: #0a4d5d;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background: linear-gradient(45deg, #0cf, #0ff);
+      box-shadow: 0 0 15px #0cffaa;
+    }
+
+    .status {
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+      color: #0af88f;
+      min-height: 1.2em;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+
+    /* Ad container */
+    .ad-space {
+      margin: 2rem 0;
+      background: #222;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      color: #0af88f;
+      border: 1px dashed #0af88f;
+      font-weight: 600;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: #444;
+      font-size: 0.85rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      main {
+        padding: 1.2rem;
+      }
+      header {
+        font-size: 1.6rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>Image Compression Tool</header>
+
+<main>
+  <form id="compressForm" aria-label="Image compression form">
+    <label for="imageInput">Choose Image</label>
+    <input type="file" id="imageInput" accept="image/*" aria-required="true" required />
+
+    <label for="compressionRange">Compression Level: <span id="compressionValue">80</span>%</label>
+    <input type="range" id="compressionRange" min="10" max="100" value="80" step="1" aria-valuemin="10" aria-valuemax="100" aria-valuenow="80" />
+
+    <button type="submit" id="compressBtn" disabled>Compress & Download</button>
+  </form>
+
+  <div class="status" id="statusMsg" aria-live="polite" aria-atomic="true"></div>
+</main>
+
+
+
+
+
+
+<!-- Ad space #1 -->
+
+
+
+
+
+<footer>
+
+
+    
+
+  <!-- Ad space #2 -->
+
+
+
+
+ 
+  &copy; 2025 YourName. All rights reserved.
+</footer>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+
+  const imageInput = document.getElementById('imageInput');
+  const compressionRange = document.getElementById('compressionRange');
+  const compressionValue = document.getElementById('compressionValue');
+  const compressBtn = document.getElementById('compressBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  let originalFile = null;
+
+  // Update compression value label
+  compressionRange.addEventListener('input', () => {
+    compressionValue.textContent = compressionRange.value;
+    compressionRange.setAttribute('aria-valuenow', compressionRange.value);
+  });
+
+  // Enable compress button only if file selected
+  imageInput.addEventListener('change', () => {
+    if (imageInput.files && imageInput.files[0]) {
+      originalFile = imageInput.files[0];
+      compressBtn.disabled = false;
+      statusMsg.textContent = '';
+    } else {
+      compressBtn.disabled = true;
+      statusMsg.textContent = '';
+    }
+  });
+
+  // Compress and auto-download on form submit
+  document.getElementById('compressForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!originalFile) return;
+
+    const quality = compressionRange.value / 100;
+
+    if (!originalFile.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+
+    compressBtn.disabled = true;
+    compressBtn.textContent = 'Compressing...';
+    statusMsg.textContent = 'Compressing your image, please wait...';
+
+    const img = new Image();
+    img.src = URL.createObjectURL(originalFile);
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(blob => {
+        if (!blob) {
+          alert('Compression failed. Try another image.');
+          compressBtn.disabled = false;
+          compressBtn.textContent = 'Compress & Download';
+          statusMsg.textContent = '';
+          return;
+        }
+
+        // Create download link and trigger click
+        const compressedURL = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = compressedURL;
+        a.download = `compressed-${originalFile.name.replace(/\s+/g, '-')}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Clean up object URLs after some time to free memory
+        setTimeout(() => {
+          URL.revokeObjectURL(compressedURL);
+          URL.revokeObjectURL(img.src);
+        }, 10000);
+
+        statusMsg.textContent = `Compression complete! Download started. Original: ${(originalFile.size / 1024).toFixed(1)} KB, Compressed: ${(blob.size / 1024).toFixed(1)} KB.`;
+
+        compressBtn.disabled = false;
+        compressBtn.textContent = 'Compress & Download';
+        imageInput.value = ''; // reset file input
+        originalFile = null;
+      }, 'image/jpeg', quality);
+    };
+
+    img.onerror = () => {
+      alert('Failed to load image. Please select a different file.');
+      compressBtn.disabled = false;
+      compressBtn.textContent = 'Compress & Download';
+      statusMsg.textContent = '';
+    };
+  });
+</script>
+
+</body>
+</html>
