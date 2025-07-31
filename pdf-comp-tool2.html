@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PDF Compressor - ToolHub</title>
+  <meta name="description" content="Compress PDF files online with ToolHub. Fast, secure, and free PDF compression tool." />
+  <meta name="keywords" content="PDF Compressor, compress PDF online, PDF optimization, PDF tools, pdf size decrease online" />
+  <meta name="author" content="YourName" />
+
+  <!-- Styles (same as your tool UI) -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    header {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #0af;
+      text-shadow: 0 0 8px #0af88f;
+    }
+    main {
+      background: #1f1f1f;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(10, 175, 255, 0.2), inset 0 0 15px rgba(10, 175, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    label {
+      font-weight: 600;
+      color: #0af;
+    }
+    input[type="file"] {
+      border: 2px dashed #0af;
+      background: #222;
+      color: #0af;
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+    }
+    #pdfInput{
+        margin-top: 10px;
+    }
+    button {
+      margin-top: 15px;
+      background: linear-gradient(45deg, #0af, #0af88f);
+      border: none;
+      color: #121212;
+      padding: 0.9rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0af88f;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #0cffaa, #0affd3);
+      box-shadow: 0 0 15px #0affd3;
+    }
+    .status {
+      font-size: 0.95rem;
+      color: #0af88f;
+      min-height: 1.2em;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      color: #444;
+      font-size: 0.85rem;
+    }
+    .ad-space {
+      margin: 2rem 0;
+      background: #222;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      color: #0af88f;
+      border: 1px dashed #0af88f;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<header>PDF Compressor</header>
+
+<main>
+  <form id="pdfForm">
+    <label for="pdfInput">Select a PDF File</label>
+    <input type="file" id="pdfInput" accept="application/pdf" required />
+    <button type="submit" id="compressBtn">Compress & Download</button>
+    <div class="status" id="statusMsg"></div>
+  </form>
+</main>
+
+
+
+
+
+<!-- Ad Placeholder -->
+
+
+
+
+
+<footer>&copy; 2025 ToolHub. All rights reserved.</footer>
+
+
+
+<!-- PDF-LIB CDN -->
+
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script>
+  const pdfInput = document.getElementById('pdfInput');
+  const compressBtn = document.getElementById('compressBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  document.getElementById('pdfForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const file = pdfInput.files[0];
+    if (!file || file.type !== "application/pdf") {
+      alert("Please select a valid PDF file.");
+      return;
+    }
+
+    compressBtn.disabled = true;
+    compressBtn.textContent = 'Compressing...';
+    statusMsg.textContent = 'Processing your PDF...';
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const existingPdfBytes = new Uint8Array(reader.result);
+        const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes, { ignoreEncryption: true });
+
+        // "Compression" - Resave the document (some unused data will be stripped)
+        const compressedPdfBytes = await pdfDoc.save({ useObjectStreams: true });
+
+        const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `compressed-${file.name}`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+        statusMsg.textContent = `Download complete! Size: ${(blob.size / 1024).toFixed(1)} KB`;
+        compressBtn.textContent = 'Compress & Download';
+        compressBtn.disabled = false;
+        pdfInput.value = '';
+      };
+      reader.readAsArrayBuffer(file);
+    } catch (error) {
+      console.error("Compression error:", error);
+      statusMsg.textContent = "Error compressing PDF. Please try again.";
+      compressBtn.disabled = false;
+      compressBtn.textContent = 'Compress & Download';
+    }
+  });
+</script>
+
+</body>
+</html>
